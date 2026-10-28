@@ -1,0 +1,21 @@
+{
+  "name": "voxaryn-voice-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Twilio Media Streams bridge that connects phone calls to the Voxaryn AI realtime agent.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "twilio": "^5.3.5",
+    "ws": "^8.18.0"
+  }
+}

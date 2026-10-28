@@ -1,0 +1,126 @@
+{
+  "name": "Agent",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "User id that owns this agent"
+    },
+    "name": {
+      "type": "string"
+    },
+    "purpose": {
+      "type": "string"
+    },
+    "voice": {
+      "type": "string",
+      "enum": [
+        "Warm",
+        "Professional",
+        "Playful",
+        "Calm"
+      ],
+      "default": "Warm"
+    },
+    "language": {
+      "type": "string",
+      "default": "English (US)"
+    },
+    "tone": {
+      "type": "string",
+      "default": "Reassuring"
+    },
+    "greeting": {
+      "type": "string"
+    },
+    "rules": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "paused"
+      ],
+      "default": "active"
+    },
+    "phone_number": {
+      "type": "string"
+    },
+    "personality_prompt": {
+      "type": "string"
+    },
+    "permissions": {
+      "type": "object",
+      "properties": {
+        "book_appointments": {
+          "type": "boolean",
+          "default": false
+        },
+        "read_contacts": {
+          "type": "boolean",
+          "default": false
+        },
+        "send_confirmations": {
+          "type": "boolean",
+          "default": false
+        },
+        "transfer_to_human": {
+          "type": "boolean",
+          "default": false
+        },
+        "collect_info": {
+          "type": "boolean",
+          "default": false
+        },
+        "send_notifications": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "default": {}
+    },
+    "recording_enabled": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.owner_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.owner_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.owner_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    }
+  }
+}

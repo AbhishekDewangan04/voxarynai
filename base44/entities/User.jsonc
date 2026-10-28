@@ -1,0 +1,27 @@
+{
+  "properties": {
+    "role": {
+      "type": "string",
+      "description": "The role of the user in the app",
+      "enum": [
+        "admin",
+        "user"
+      ]
+    },
+    "recording_retention": {
+      "type": "string",
+      "description": "How long call recordings are kept for this user",
+      "enum": [
+        "off",
+        "30_days",
+        "90_days"
+      ],
+      "default": "off"
+    }
+  },
+  "required": [
+    "role"
+  ],
+  "name": "User",
+  "type": "object"
+}

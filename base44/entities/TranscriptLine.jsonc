@@ -1,0 +1,66 @@
+{
+  "name": "TranscriptLine",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string"
+    },
+    "call_id": {
+      "type": "string"
+    },
+    "speaker": {
+      "type": "string",
+      "enum": [
+        "caller",
+        "agent"
+      ],
+      "default": "caller"
+    },
+    "text": {
+      "type": "string"
+    },
+    "timestamp_ms": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "call_id",
+    "text"
+  ],
+  "rls": {
+    "create": {
+      "data.owner_id": "{{user.id}}"
+    },
+    "read": {
+      "$or": [
+        {
+          "data.owner_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.owner_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.owner_id": "{{user.id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    }
+  }
+}
