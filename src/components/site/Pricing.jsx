@@ -1,7 +1,8 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Check, Sparkles } from "lucide-react";
 import { GlassButton, GlassCard } from "./Glass";
+import SquishyCard from "@/components/ui/squishy-card";
 import Reveal from "./Reveal";
 import SectionShell from "./SectionShell";
 
@@ -83,7 +84,7 @@ export default function Pricing() {
                 type="button"
                 onClick={() => setYearly(option.id === "yearly")}
                 aria-pressed={selected}
-                className={`relative rounded-full px-4 py-2 text-[12.5px] font-medium transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 ${
+                className={`cursor-target relative rounded-full px-4 py-2 text-[12.5px] font-medium transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 ${
                   selected ? "text-[#05060f]" : "text-white/55 hover:text-white"
                 }`}
               >
@@ -102,8 +103,8 @@ export default function Pricing() {
       </Reveal>
 
       <div className="mt-10 grid gap-4 lg:grid-cols-3 lg:items-stretch">
-        {PLANS.map((plan, index) => (
-          <Reveal key={plan.name} delay={index * 0.06}>
+        {PLANS.map((plan, index) => {
+          const cardElement = (
             <GlassCard
               className={`relative flex h-full flex-col p-6 sm:p-7 ${
                 plan.highlight ? "border-white/30 bg-white/[0.12] shadow-[0_40px_90px_-40px_rgba(124,58,237,0.85)]" : ""
@@ -142,7 +143,7 @@ export default function Pricing() {
 
                 <div className="mt-6">
                   <GlassButton size="md" tone={plan.highlight ? "primary" : "default"} className="w-full">
-                    <a href="#waitlist" className="inline-flex w-full items-center justify-center">
+                    <a href="#waitlist" className="cursor-target inline-flex w-full items-center justify-center">
                       {plan.cta}
                     </a>
                   </GlassButton>
@@ -160,8 +161,20 @@ export default function Pricing() {
                 </ul>
               </div>
             </GlassCard>
-          </Reveal>
-        ))}
+          );
+
+          return (
+            <Reveal key={plan.name} delay={index * 0.06}>
+              {plan.highlight ? (
+                <SquishyCard className="h-full">
+                  {cardElement}
+                </SquishyCard>
+              ) : (
+                cardElement
+              )}
+            </Reveal>
+          );
+        })}
       </div>
 
       <Reveal delay={0.15}>

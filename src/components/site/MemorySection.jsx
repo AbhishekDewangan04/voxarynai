@@ -1,6 +1,7 @@
-﻿import React from "react";
+import React from "react";
 import { ArrowRight, Brain, MessageSquare, Sparkles } from "lucide-react";
 import { GlassCard, GlassChip } from "./Glass";
+import TiltShineCard from "@/components/ui/tilt-shine-card";
 import Reveal from "./Reveal";
 import SectionShell from "./SectionShell";
 
@@ -45,19 +46,21 @@ export default function MemorySection() {
           {STEPS.map(({ icon: Icon, label, date, quote, tag }, index) => (
             <React.Fragment key={label}>
               <Reveal delay={index * 0.08}>
-                <GlassCard className="h-full p-6">
-                  <div className="flex items-center justify-between">
-                    <span className="grid h-10 w-10 place-items-center rounded-2xl border border-white/15 bg-gradient-to-br from-violet-500/30 to-cyan-400/20 text-white">
-                      <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
-                    </span>
-                    <GlassChip className="rounded-full px-2.5 py-1 text-[9.5px] font-semibold uppercase tracking-[0.14em] text-white/55">
-                      {tag}
-                    </GlassChip>
-                  </div>
-                  <h3 className="mt-5 font-display text-[15.5px] font-semibold text-white">{label}</h3>
-                  <p className="mt-0.5 font-mono text-[10.5px] text-white/35">{date}</p>
-                  <p className="mt-4 text-[13.5px] leading-relaxed text-white/70">{quote}</p>
-                </GlassCard>
+                <TiltShineCard className="h-full">
+                  <GlassCard className="h-full p-6">
+                    <div className="flex items-center justify-between">
+                      <span className="grid h-10 w-10 place-items-center rounded-2xl border border-white/15 bg-gradient-to-br from-violet-500/30 to-cyan-400/20 text-white">
+                        <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
+                      </span>
+                      <GlassChip className="rounded-full px-2.5 py-1 text-[9.5px] font-semibold uppercase tracking-[0.14em] text-white/55">
+                        {tag}
+                      </GlassChip>
+                    </div>
+                    <h3 className="mt-5 font-display text-[15.5px] font-semibold text-white">{label}</h3>
+                    <p className="mt-0.5 font-mono text-[10.5px] text-white/35">{date}</p>
+                    <p className="mt-4 text-[13.5px] leading-relaxed text-white/70">{quote}</p>
+                  </GlassCard>
+                </TiltShineCard>
               </Reveal>
               {index < STEPS.length - 1 && (
                 <div className="hidden items-center justify-center lg:flex" aria-hidden="true">

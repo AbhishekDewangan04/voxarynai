@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Brain, ListChecks, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import {
@@ -53,6 +53,7 @@ export default function CallDrawer({ call, onClose }) {
       />
       <section
         role="dialog"
+        data-lenis-prevent=""
         aria-label={`Call with ${call.caller_name || "unknown caller"}`}
         className="relative m-2 flex h-[calc(100%-1rem)] w-full max-w-md flex-col overflow-hidden rounded-3xl border border-white/15 bg-[#070b18]/95 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.95)]"
       >

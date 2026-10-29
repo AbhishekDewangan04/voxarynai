@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import Reveal from "./Reveal";
 import { cn } from "@/lib/utils";
 
@@ -14,7 +14,7 @@ export default function SectionShell({
 }) {
   const centered = align === "center";
   return (
-    <section id={id} className={cn("relative py-20 sm:py-24 lg:py-28", className)}>
+    <section id={id} className={cn("relative py-20 sm:py-24 lg:py-28 [content-visibility:auto] [contain-intrinsic-size:auto_600px]", className)}>
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
         {(eyebrow || title || description) && (
           <Reveal className={cn("max-w-2xl", centered && "mx-auto text-center")}>

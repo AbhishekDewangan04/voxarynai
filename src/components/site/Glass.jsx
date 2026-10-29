@@ -1,14 +1,14 @@
-﻿import React from "react";
+import React from "react";
 import { cn } from "@/lib/utils";
 import { LiquidGlass, LiquidGlassButton } from "@/components/ui/apple-tahoe-liquid-glass-button";
 
 /** Large refractive panel — hero card, dashboard shell, final CTA. */
-export function GlassPanel({ className, children, ...props }) {
+export function GlassPanel({ className, children, refraction = 0, ...props }) {
   return (
     <LiquidGlass
       material="clear"
       appearance="dark"
-      refraction={26}
+      refraction={refraction}
       bezel={30}
       blur={2}
       saturation={1.45}
@@ -21,12 +21,12 @@ export function GlassPanel({ className, children, ...props }) {
 }
 
 /** Repeated / text-heavy card — features, pricing, FAQ: keeps text crisp. */
-export function GlassCard({ className, children, ...props }) {
+export function GlassCard({ className, children, refraction = 0, ...props }) {
   return (
     <LiquidGlass
       material="regular"
       appearance="dark"
-      refraction={14}
+      refraction={refraction}
       bezel={20}
       blur={2}
       saturation={1.35}
@@ -39,12 +39,12 @@ export function GlassCard({ className, children, ...props }) {
 }
 
 /** Small inline surface — chips, badges, toggles. */
-export function GlassChip({ className, children, ...props }) {
+export function GlassChip({ className, children, refraction = 0, ...props }) {
   return (
     <LiquidGlass
       material="regular"
       appearance="dark"
-      refraction={8}
+      refraction={refraction}
       bezel={10}
       blur={1}
       saturation={1.3}
@@ -58,7 +58,7 @@ export function GlassChip({ className, children, ...props }) {
 
 export function GlassButton({ className, children, ...props }) {
   return (
-    <LiquidGlassButton className={className} {...props}>
+    <LiquidGlassButton className={cn("cursor-target", className)} {...props}>
       {children}
     </LiquidGlassButton>
   );

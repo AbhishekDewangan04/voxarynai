@@ -89,7 +89,7 @@ export default function Settings() {
         description="Your profile, recording policy and data controls."
       />
 
-      <GlassPanel className="p-5 sm:p-6" refraction={18}>
+      <GlassPanel className="p-5 sm:p-6">
         <form onSubmit={saveProfile} className="space-y-4">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">Profile</p>
           <div className="grid gap-3 sm:grid-cols-2">

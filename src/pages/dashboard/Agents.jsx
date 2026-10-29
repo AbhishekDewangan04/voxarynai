@@ -215,8 +215,8 @@ export default function Agents() {
             onClick={() => setEditing(null)}
             className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
           />
-          <div className="relative mx-auto my-6 w-full max-w-2xl px-3">
-            <GlassPanel className="p-5 sm:p-6" refraction={24}>
+          <div data-lenis-prevent className="relative mx-auto my-6 w-full max-w-2xl px-3">
+            <GlassPanel className="p-5 sm:p-6">
               <div className="mb-4 flex items-center justify-between gap-2">
                 <div>
                   <p className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-white/40">

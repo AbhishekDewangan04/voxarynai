@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink, Outlet } from "react-router-dom";
 import {
   ArrowUpRight,
@@ -26,7 +26,7 @@ const NAV = [
 ];
 
 function navClass({ isActive }) {
-  return `flex items-center gap-2.5 rounded-2xl px-3 py-2.5 text-[13px] font-medium transition-colors ${
+  return `cursor-target flex items-center gap-2.5 rounded-2xl px-3 py-2.5 text-[13px] font-medium transition-colors ${
     isActive
       ? "border border-white/15 bg-white/[0.14] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]"
       : "border border-transparent text-white/55 hover:bg-white/[0.06] hover:text-white"
@@ -53,7 +53,7 @@ export default function DashboardShell() {
       <div className="mx-auto flex w-full max-w-[1500px] gap-4 px-3 py-3 sm:px-5 sm:py-4">
         <aside className="hidden w-[228px] shrink-0 lg:block">
           <div className="sticky top-4 flex h-[calc(100vh-2rem)] flex-col rounded-[1.75rem] border border-white/12 bg-white/[0.045] p-3 backdrop-blur-2xl">
-            <Link to="/" className="block px-2 py-1.5">
+            <Link to="/" className="cursor-target block px-2 py-1.5">
               <Brand />
             </Link>
 
@@ -79,7 +79,7 @@ export default function DashboardShell() {
               <div className="mt-1 flex items-center justify-between gap-1">
                 <Link
                   to="/"
-                  className="inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[11.5px] text-white/45 transition-colors hover:text-white"
+                  className="cursor-target inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[11.5px] text-white/45 transition-colors hover:text-white"
                 >
                   Back to site
                   <ArrowUpRight className="h-3 w-3" aria-hidden="true" />
@@ -87,7 +87,7 @@ export default function DashboardShell() {
                 <button
                   type="button"
                   onClick={() => base44.auth.logout()}
-                  className="inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[11.5px] text-white/45 transition-colors hover:text-white"
+                  className="cursor-target inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[11.5px] text-white/45 transition-colors hover:text-white"
                 >
                   <LogOut className="h-3 w-3" aria-hidden="true" />
                   Sign out
@@ -99,7 +99,7 @@ export default function DashboardShell() {
 
         <div className="min-w-0 flex-1">
           <div className="mb-3 flex items-center gap-2 overflow-x-auto rounded-full border border-white/12 bg-white/[0.05] p-1.5 backdrop-blur-xl lg:hidden">
-            <Link to="/" className="shrink-0 px-2">
+            <Link to="/" className="cursor-target shrink-0 px-2">
               <Brand />
             </Link>
             <span className="h-5 w-px shrink-0 bg-white/15" />
@@ -109,7 +109,7 @@ export default function DashboardShell() {
                 to={to}
                 end={end}
                 className={({ isActive }) =>
-                  `shrink-0 rounded-full px-3 py-1.5 text-[12px] font-medium transition-colors ${
+                  `cursor-target shrink-0 rounded-full px-3 py-1.5 text-[12px] font-medium transition-colors ${
                     isActive ? "bg-white/15 text-white" : "text-white/50"
                   }`
                 }

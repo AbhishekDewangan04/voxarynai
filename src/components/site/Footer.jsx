@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Github, Linkedin, Twitter } from "lucide-react";
 import Brand from "./Brand";
@@ -44,7 +44,7 @@ const SOCIALS = [
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-white/10 pb-10 pt-14">
+    <footer className="relative border-t border-white/10 pb-10 pt-14 [content-visibility:auto] [contain-intrinsic-size:auto_400px]">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
         <div className="grid gap-10 lg:grid-cols-[1.3fr_2fr]">
           <div>
@@ -79,14 +79,14 @@ export default function Footer() {
                       {link.href.startsWith("mailto:") ? (
                         <a
                           href={link.href}
-                          className="text-[13px] text-white/60 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                          className="cursor-target text-[13px] text-white/60 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
                         >
                           {link.label}
                         </a>
                       ) : (
                         <Link
                           to={link.href}
-                          className="text-[13px] text-white/60 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                          className="cursor-target text-[13px] text-white/60 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
                         >
                           {link.label}
                         </Link>

@@ -1,4 +1,5 @@
-﻿import React from "react";
+import React, { useRef } from "react";
+import { useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 /**
@@ -6,6 +7,9 @@ import { cn } from "@/lib/utils";
  * compositor and never triggers layout.
  */
 export default function Waveform({ bars = 44, active = true, className, tone = "default" }) {
+  const containerRef = useRef(null);
+  const isInView = useInView(containerRef, { margin: "50px" });
+
   const heights = React.useMemo(
     () =>
       Array.from({ length: bars }, (_, i) => {
@@ -20,12 +24,14 @@ export default function Waveform({ bars = 44, active = true, className, tone = "
       ? "from-cyan-300/50 via-sky-300/70 to-violet-300/50"
       : "from-cyan-400/80 via-sky-400 to-violet-300/90";
 
+  const isWaveActive = active && isInView;
+
   return (
-    <div className={cn("flex h-full w-full items-center justify-center gap-[3px]", className)} aria-hidden="true">
+    <div ref={containerRef} className={cn("flex h-full w-full items-center justify-center gap-[3px]", className)} aria-hidden="true">
       {heights.map((h, i) => (
         <span
           key={i}
-          className={cn("w-[3px] shrink-0 origin-center rounded-full bg-gradient-to-t transition-opacity duration-500", palette, active ? "animate-wave" : "opacity-40")}
+          className={cn("w-[3px] shrink-0 origin-center rounded-full bg-gradient-to-t transition-opacity duration-500", palette, isWaveActive ? "animate-wave" : "opacity-40")}
           style={{
             height: `${h}%`,
             animationDelay: `${(i % 11) * 0.085}s`,

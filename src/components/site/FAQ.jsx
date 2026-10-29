@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { GlassCard } from "./Glass";
@@ -59,7 +59,7 @@ export default function FAQ() {
                     aria-expanded={isOpen}
                     aria-controls={`faq-panel-${index}`}
                     onClick={() => setOpenIndex(isOpen ? -1 : index)}
-                    className="flex w-full items-center justify-between gap-5 py-4 text-left text-[14px] font-medium text-white transition-colors hover:text-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 sm:text-[14.5px]"
+                    className="cursor-target flex w-full items-center justify-between gap-5 py-4 text-left text-[14px] font-medium text-white transition-colors hover:text-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 sm:text-[14.5px]"
                   >
                     {item.q}
                     <ChevronDown

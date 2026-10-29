@@ -1,6 +1,7 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { Briefcase, Building2, HeartPulse, House, Quote } from "lucide-react";
 import { GlassCard } from "./Glass";
+import TiltShineCard from "@/components/ui/tilt-shine-card";
 import Reveal from "./Reveal";
 import SectionShell from "./SectionShell";
 
@@ -92,7 +93,7 @@ export default function UseCases() {
                 if (event.key === "ArrowRight") setActiveId(TABS[(currentIndex + 1) % TABS.length].id);
                 if (event.key === "ArrowLeft") setActiveId(TABS[(currentIndex - 1 + TABS.length) % TABS.length].id);
               }}
-              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-[12.5px] font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 ${
+              className={`cursor-target inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-[12.5px] font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 ${
                 selected
                   ? "border-white/30 bg-white/[0.16] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]"
                   : "border-white/10 bg-white/[0.04] text-white/55 hover:border-white/20 hover:text-white"
@@ -113,29 +114,31 @@ export default function UseCases() {
         tabIndex={0}
       >
         <Reveal key={active.id} y={16}>
-          <GlassCard className="grid gap-8 p-7 sm:p-9 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-            <div>
-              <h3 className="font-display-tight text-[clamp(1.5rem,2.6vw,2.1rem)] text-white">{active.headline}</h3>
-              <p className="mt-4 max-w-xl text-[14.5px] leading-relaxed text-white/62">{active.copy}</p>
-              <ul className="mt-6 space-y-2.5">
-                {active.bullets.map((bullet) => (
-                  <li key={bullet} className="flex items-start gap-2.5 text-[13.5px] text-white/75">
-                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
-                    {bullet}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="rounded-3xl border border-white/12 bg-[linear-gradient(140deg,rgba(47,91,255,0.26),rgba(124,58,237,0.2)_55%,rgba(34,211,238,0.2))] p-6">
-              <Quote className="h-6 w-6 text-white/40" aria-hidden="true" />
-              <p className="mt-4 text-pretty text-[15px] leading-relaxed text-white/90">{active.quote}</p>
-              <div className="mt-6 flex items-end gap-2 border-t border-white/15 pt-4">
-                <span className="font-display text-3xl font-bold tracking-[-0.04em] text-white">{active.metric[0]}</span>
-                <span className="pb-1 text-[11.5px] text-white/55">{active.metric[1]}</span>
+          <TiltShineCard>
+            <GlassCard className="grid gap-8 p-7 sm:p-9 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+              <div>
+                <h3 className="font-display-tight text-[clamp(1.5rem,2.6vw,2.1rem)] text-white">{active.headline}</h3>
+                <p className="mt-4 max-w-xl text-[14.5px] leading-relaxed text-white/62">{active.copy}</p>
+                <ul className="mt-6 space-y-2.5">
+                  {active.bullets.map((bullet) => (
+                    <li key={bullet} className="flex items-start gap-2.5 text-[13.5px] text-white/75">
+                      <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
+                      {bullet}
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
-          </GlassCard>
+
+              <div className="rounded-3xl border border-white/12 bg-[linear-gradient(140deg,rgba(47,91,255,0.26),rgba(124,58,237,0.2)_55%,rgba(34,211,238,0.2))] p-6">
+                <Quote className="h-6 w-6 text-white/40" aria-hidden="true" />
+                <p className="mt-4 text-pretty text-[15px] leading-relaxed text-white/90">{active.quote}</p>
+                <div className="mt-6 flex items-end gap-2 border-t border-white/15 pt-4">
+                  <span className="font-display text-3xl font-bold tracking-[-0.04em] text-white">{active.metric[0]}</span>
+                  <span className="pb-1 text-[11.5px] text-white/55">{active.metric[1]}</span>
+                </div>
+              </div>
+            </GlassCard>
+          </TiltShineCard>
         </Reveal>
       </div>
     </SectionShell>

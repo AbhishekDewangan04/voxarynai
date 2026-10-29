@@ -1,4 +1,4 @@
-﻿import React, { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { agents, calls, callsPerDay, workspaceStats } from "@/lib/demoData";
@@ -31,7 +31,7 @@ export default function DashboardPreview() {
           className="absolute -inset-x-8 -inset-y-12 -z-10 bg-[radial-gradient(45%_50%_at_15%_10%,rgba(47,91,255,0.42),transparent_70%),radial-gradient(40%_45%_at_85%_80%,rgba(232,121,249,0.26),transparent_72%)] blur-[60px]"
         />
         <Reveal y={36}>
-          <GlassPanel className="p-3 sm:p-4" refraction={30}>
+          <GlassPanel className="p-3 sm:p-4">
             {/* window chrome */}
             <div className="flex items-center justify-between gap-3 px-2 pb-3 pt-1">
               <div className="flex items-center gap-1.5" aria-hidden="true">

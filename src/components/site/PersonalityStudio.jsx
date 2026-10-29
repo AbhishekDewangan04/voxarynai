@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pause, Sparkles, Volume2 } from "lucide-react";
 import { GlassButton, GlassPanel } from "./Glass";
 import Reveal from "./Reveal";
@@ -36,7 +36,7 @@ function Chip({ active, children, onClick }) {
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`rounded-full border px-3.5 py-2 text-[12.5px] font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 ${
+      className={`cursor-target rounded-full border px-3.5 py-2 text-[12.5px] font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 ${
         active
           ? "border-white/35 bg-white/20 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.4),0_10px_24px_-14px_rgba(124,58,237,0.9)]"
           : "border-white/12 bg-white/[0.04] text-white/60 hover:border-white/25 hover:bg-white/10 hover:text-white"

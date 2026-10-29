@@ -76,7 +76,7 @@ export default function Tasks() {
         ))}
       </div>
 
-      <GlassPanel className="p-4 sm:p-5" refraction={18}>
+      <GlassPanel className="p-4 sm:p-5">
         {loading ? (
           <SkeletonRows rows={4} />
         ) : filtered.length === 0 ? (

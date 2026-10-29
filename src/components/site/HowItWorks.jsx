@@ -1,6 +1,7 @@
-﻿import React from "react";
+import React from "react";
 import { MicVocal, PhoneCall, SlidersHorizontal, UserPlus } from "lucide-react";
 import { GlassCard } from "./Glass";
+import ShimmerBorderCard from "@/components/ui/shimmer-border-card";
 import Reveal from "./Reveal";
 import SectionShell from "./SectionShell";
 
@@ -55,16 +56,18 @@ export default function HowItWorks() {
         <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:pt-12">
           {STEPS.map(({ icon: Icon, title, copy }, index) => (
             <Reveal key={title} delay={index * 0.07}>
-              <GlassCard className="h-full p-6">
-                <div className="flex items-center justify-between">
-                  <span className="grid h-10 w-10 place-items-center rounded-2xl border border-white/15 bg-gradient-to-br from-blue-500/25 to-violet-500/20 text-white">
-                    <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
-                  </span>
-                  <span className="font-mono text-[11px] tracking-[0.2em] text-white/35">0{index + 1}</span>
-                </div>
-                <h3 className="mt-5 font-display text-[16.5px] font-semibold tracking-[-0.01em] text-white">{title}</h3>
-                <p className="mt-2 text-[13.5px] leading-relaxed text-white/58">{copy}</p>
-              </GlassCard>
+              <ShimmerBorderCard className="h-full">
+                <GlassCard className="h-full p-6">
+                  <div className="flex items-center justify-between">
+                    <span className="grid h-10 w-10 place-items-center rounded-2xl border border-white/15 bg-gradient-to-br from-blue-500/25 to-violet-500/20 text-white">
+                      <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
+                    </span>
+                    <span className="font-mono text-[11px] tracking-[0.2em] text-white/35">0{index + 1}</span>
+                  </div>
+                  <h3 className="mt-5 font-display text-[16.5px] font-semibold tracking-[-0.01em] text-white">{title}</h3>
+                  <p className="mt-2 text-[13.5px] leading-relaxed text-white/58">{copy}</p>
+                </GlassCard>
+              </ShimmerBorderCard>
             </Reveal>
           ))}
         </ol>

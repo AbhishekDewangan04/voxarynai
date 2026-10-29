@@ -1,3 +1,7 @@
+process.env.ROLLDOWN_WORKER_THREADS = process.env.ROLLDOWN_WORKER_THREADS || '2';
+process.env.ROLLDOWN_MAX_BLOCKING_THREADS = process.env.ROLLDOWN_MAX_BLOCKING_THREADS || '2';
+process.env.RAYON_NUM_THREADS = process.env.RAYON_NUM_THREADS || '2';
+
 import base44 from "@base44/vite-plugin"
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'

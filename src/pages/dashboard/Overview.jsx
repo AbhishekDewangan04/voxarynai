@@ -143,7 +143,7 @@ export default function Overview() {
         <StatCard label="Hours saved" value={`${stats.hoursSaved}h`} hint="vs handling calls yourself" />
       </div>
 
-      <GlassPanel className="p-5" refraction={20}>
+      <GlassPanel className="p-5">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">Call volume</p>
@@ -163,7 +163,7 @@ export default function Overview() {
         </div>
       </GlassPanel>
 
-      <GlassPanel className="p-5" refraction={18}>
+      <GlassPanel className="p-5">
         <div className="flex items-center justify-between gap-2">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/40">Recent calls</p>
           <button

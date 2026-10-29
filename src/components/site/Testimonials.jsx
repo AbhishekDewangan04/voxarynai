@@ -1,6 +1,7 @@
-﻿import React from "react";
+import React from "react";
 import { Quote, Star } from "lucide-react";
 import { GlassCard } from "./Glass";
+import TiltShineCard from "@/components/ui/tilt-shine-card";
 import Reveal from "./Reveal";
 import SectionShell from "./SectionShell";
 
@@ -45,33 +46,35 @@ export default function Testimonials() {
       <div className="mt-14 grid gap-4 lg:grid-cols-3">
         {TESTIMONIALS.map((item, index) => (
           <Reveal key={item.name} delay={index * 0.07}>
-            <GlassCard className="flex h-full flex-col justify-between gap-6 p-6 sm:p-7">
-              <div>
-                <div className="flex items-center gap-1" aria-label="Rated 5 out of 5">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="h-3.5 w-3.5 fill-amber-300 text-amber-300" aria-hidden="true" />
-                  ))}
+            <TiltShineCard className="h-full">
+              <GlassCard className="flex h-full flex-col justify-between gap-6 p-6 sm:p-7">
+                <div>
+                  <div className="flex items-center gap-1" aria-label="Rated 5 out of 5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className="h-3.5 w-3.5 fill-amber-300 text-amber-300" aria-hidden="true" />
+                    ))}
+                  </div>
+                  <Quote className="mt-4 h-5 w-5 text-white/25" aria-hidden="true" />
+                  <blockquote className="mt-2 text-pretty text-[14px] leading-relaxed text-white/80">{item.quote}</blockquote>
                 </div>
-                <Quote className="mt-4 h-5 w-5 text-white/25" aria-hidden="true" />
-                <blockquote className="mt-2 text-pretty text-[14px] leading-relaxed text-white/80">{item.quote}</blockquote>
-              </div>
-              <div>
-                <span className="inline-flex rounded-full border border-white/12 bg-white/[0.06] px-2.5 py-1 text-[10.5px] font-medium text-cyan-200">
-                  {item.metric}
-                </span>
-                <figcaption className="mt-4 flex items-center gap-3 border-t border-white/8 pt-4">
-                  <span
-                    className={`grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br ${item.accent} text-[11px] font-bold text-white ring-1 ring-white/25`}
-                  >
-                    {item.initials}
+                <div>
+                  <span className="inline-flex rounded-full border border-white/12 bg-white/[0.06] px-2.5 py-1 text-[10.5px] font-medium text-cyan-200">
+                    {item.metric}
                   </span>
-                  <span>
-                    <span className="block text-[12.5px] font-semibold text-white">{item.name}</span>
-                    <span className="block text-[11px] text-white/40">{item.role}</span>
-                  </span>
-                </figcaption>
-              </div>
-            </GlassCard>
+                  <figcaption className="mt-4 flex items-center gap-3 border-t border-white/8 pt-4">
+                    <span
+                      className={`grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br ${item.accent} text-[11px] font-bold text-white ring-1 ring-white/25`}
+                    >
+                      {item.initials}
+                    </span>
+                    <span>
+                      <span className="block text-[12.5px] font-semibold text-white">{item.name}</span>
+                      <span className="block text-[11px] text-white/40">{item.role}</span>
+                    </span>
+                  </figcaption>
+                </div>
+              </GlassCard>
+            </TiltShineCard>
           </Reveal>
         ))}
       </div>

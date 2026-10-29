@@ -137,7 +137,7 @@ export default function Calls() {
         </SelectField>
       </div>
 
-      <GlassPanel className="p-4 sm:p-5" refraction={18}>
+      <GlassPanel className="p-4 sm:p-5">
         {loading ? (
           <SkeletonRows rows={5} />
         ) : calls.length === 0 ? (

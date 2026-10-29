@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Check, ShieldCheck, Sparkles } from "lucide-react";
 import { base44 } from "@/api/base44Client";
@@ -48,7 +48,7 @@ export default function FinalCTA() {
   };
 
   return (
-    <section id="waitlist" className="relative py-16 sm:py-20 lg:py-24">
+    <section id="waitlist" className="relative py-16 sm:py-20 lg:py-24 [content-visibility:auto] [contain-intrinsic-size:auto_600px]">
       <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
         <div className="relative">
           <div
@@ -56,7 +56,7 @@ export default function FinalCTA() {
             className="absolute -inset-x-4 -inset-y-8 -z-10 bg-[radial-gradient(50%_60%_at_25%_25%,rgba(124,58,237,0.55),transparent_70%),radial-gradient(45%_55%_at_75%_70%,rgba(34,211,238,0.4),transparent_72%),radial-gradient(40%_50%_at_50%_100%,rgba(47,91,255,0.5),transparent_70%)] blur-[60px]"
           />
           <Reveal y={30}>
-            <GlassPanel className="overflow-hidden px-6 py-12 text-center sm:px-10 sm:py-16" refraction={34}>
+            <GlassPanel className="overflow-hidden px-6 py-12 text-center sm:px-10 sm:py-16">
               <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-40 opacity-40">
                 <Waveform bars={64} tone="soft" />
               </div>

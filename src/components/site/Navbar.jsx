@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, LayoutDashboard, Menu, X } from "lucide-react";
@@ -28,10 +28,30 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    if (typeof window === "undefined") return;
+    const sentinel = document.createElement("div");
+    sentinel.style.position = "absolute";
+    sentinel.style.top = "0";
+    sentinel.style.left = "0";
+    sentinel.style.width = "1px";
+    sentinel.style.height = "24px";
+    sentinel.style.pointerEvents = "none";
+    sentinel.style.visibility = "hidden";
+    sentinel.setAttribute("aria-hidden", "true");
+    document.body.prepend(sentinel);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setScrolled(!entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
+    observer.observe(sentinel);
+
+    return () => {
+      observer.disconnect();
+      sentinel.remove();
+    };
   }, []);
 
   return (
@@ -50,7 +70,7 @@ export default function Navbar() {
                 <li key={link.href}>
                   <a
                     href={link.href}
-                    className="rounded-full px-3 py-2 text-[13.5px] font-medium text-white/70 transition-colors duration-300 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
+                    className="cursor-target rounded-full px-3 py-2 text-[13.5px] font-medium text-white/70 transition-colors duration-300 hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
                   >
                     {link.label}
                   </a>
@@ -61,13 +81,13 @@ export default function Navbar() {
             <div className="flex items-center gap-2">
               <Link
                 to="/login?returnTo=/dashboard"
-                className="hidden items-center gap-1.5 rounded-full px-3 py-2 text-[13.5px] font-medium text-white/70 transition-colors hover:text-white sm:inline-flex"
+                className="cursor-target hidden items-center gap-1.5 rounded-full px-3 py-2 text-[13.5px] font-medium text-white/70 transition-colors hover:text-white sm:inline-flex"
               >
                 <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
                 Sign in
               </Link>
               <GlassButton size="sm" className="hidden sm:inline-flex" tone="primary">
-                <Link to="/register?returnTo=/dashboard" className="inline-flex items-center gap-1.5">
+                <Link to="/register?returnTo=/dashboard" className="cursor-target inline-flex items-center gap-1.5">
                   Get Started
                   <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
                 </Link>
@@ -102,7 +122,7 @@ export default function Navbar() {
                         <a
                           href={link.href}
                           onClick={(event) => jumpToSection(event, link.href)}
-                          className="block rounded-2xl px-4 py-3 text-sm font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+                          className="cursor-target block rounded-2xl px-4 py-3 text-sm font-medium text-white/80 transition-colors hover:bg-white/10 hover:text-white"
                         >
                           {link.label}
                         </a>
@@ -113,7 +133,7 @@ export default function Navbar() {
                     <Link
                       to="/login?returnTo=/dashboard"
                       onClick={() => setOpen(false)}
-                      className="flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium text-white/80 transition-colors hover:bg-white/10"
+                      className="cursor-target flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-medium text-white/80 transition-colors hover:bg-white/10"
                     >
                       <LayoutDashboard className="h-4 w-4" aria-hidden="true" />
                       Sign in / Dashboard
@@ -122,7 +142,7 @@ export default function Navbar() {
                       <Link
                         to="/register?returnTo=/dashboard"
                         onClick={() => setOpen(false)}
-                        className="inline-flex items-center gap-1.5"
+                        className="cursor-target inline-flex items-center gap-1.5"
                       >
                         Get Started
                         <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
