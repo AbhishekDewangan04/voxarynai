@@ -12,6 +12,7 @@ import {
   Settings,
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { appParams } from "@/lib/app-params";
 import Background from "@/components/site/Background";
 import Brand from "@/components/site/Brand";
 
@@ -37,6 +38,10 @@ export default function DashboardShell() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    if (!appParams.appId) {
+      setUser(null);
+      return;
+    }
     base44.auth.me().then(setUser).catch(() => setUser(null));
   }, []);
 

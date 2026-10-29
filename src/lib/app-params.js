@@ -10,19 +10,41 @@ const clearStoredAccessToken = () => {
 	window.localStorage.removeItem('token');
 }
 
+const cleanParam = (val) => {
+	if (!val || val === 'undefined' || val === 'null') return '';
+	return typeof val === 'string' ? val.trim() : String(val);
+};
+
 const getAppParams = () => {
 	if (isClearAccessTokenRequested()) {
 		clearStoredAccessToken();
 	}
-	return {
-		appId: import.meta.env.VITE_BASE44_APP_ID,
-		token: getAccessToken(),
-		functionsVersion: (!isNode && new URLSearchParams(window.location.search).get("functions_version")?.trim()) || import.meta.env.VITE_BASE44_FUNCTIONS_VERSION,
-		appBaseUrl: import.meta.env.VITE_BASE44_APP_BASE_URL,
-	}
-}
+	const searchParams = !isNode ? new URLSearchParams(window.location.search) : null;
+	const appId =
+		cleanParam(import.meta.env.VITE_BASE44_APP_ID) ||
+		cleanParam(searchParams?.get("app_id")) ||
+		cleanParam(searchParams?.get("appId")) ||
+		"";
 
+	const appBaseUrl =
+		cleanParam(import.meta.env.VITE_BASE44_APP_BASE_URL) ||
+		cleanParam(import.meta.env.VITE_BASE44_BACKEND_URL) ||
+		cleanParam(searchParams?.get("app_base_url")) ||
+		"";
+
+	const functionsVersion =
+		cleanParam(searchParams?.get("functions_version")) ||
+		cleanParam(import.meta.env.VITE_BASE44_FUNCTIONS_VERSION) ||
+		"";
+
+	return {
+		appId,
+		token: getAccessToken(),
+		functionsVersion,
+		appBaseUrl,
+	};
+};
 
 export const appParams = {
 	...getAppParams()
-}
+};

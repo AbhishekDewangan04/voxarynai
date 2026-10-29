@@ -98,6 +98,10 @@ export default function OAuthConsent() {
           setError("This authorization link is invalid or has expired.");
           return;
         }
+        if (!appParams.appId) {
+          setError("Configuration error: missing App ID.");
+          return;
+        }
         // Resolve the handle first: a dead handle must never render
         // approve/deny, and the response carries the app's configured login
         // route for the signed-out redirect below. Send the session (cookie +
@@ -106,8 +110,9 @@ export default function OAuthConsent() {
         // it the display request is anonymous and shows no tools.
         const infoHeaders = {};
         if (appParams.token) infoHeaders.Authorization = "Bearer " + appParams.token;
+        const apiBase = appParams.appBaseUrl ? appParams.appBaseUrl.replace(/\/$/, '') : '';
         const res = await fetch(
-          `/api/apps/${appParams.appId}/mcp/consent-info?handle=${encodeURIComponent(ctx)}`,
+          `${apiBase}/api/apps/${appParams.appId}/mcp/consent-info?handle=${encodeURIComponent(ctx)}`,
           { credentials: "include", headers: infoHeaders },
         );
         if (!res.ok) {
@@ -152,12 +157,18 @@ export default function OAuthConsent() {
   const respond = async (action) => {
     setSubmitting(true);
     setError("");
+    if (!appParams.appId) {
+      setError("Configuration error: missing App ID.");
+      setSubmitting(false);
+      return;
+    }
     try {
       const headers = { "Content-Type": "application/json" };
       // Cookie-backed sessions carry no token; sending "Bearer null" would
       // shadow the valid cookie, so add the header only when a token exists.
       if (appParams.token) headers.Authorization = "Bearer " + appParams.token;
-      const res = await fetch(`/api/apps/${appParams.appId}/mcp/authorize-grant`, {
+      const apiBase = appParams.appBaseUrl ? appParams.appBaseUrl.replace(/\/$/, '') : '';
+      const res = await fetch(`${apiBase}/api/apps/${appParams.appId}/mcp/authorize-grant`, {
         method: "POST",
         credentials: "include",
         headers,

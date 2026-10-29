@@ -1,4 +1,4 @@
-﻿import React, { forwardRef, useId, useMemo } from "react";
+import React, { forwardRef, useId, useMemo } from "react";
 import { cva } from "class-variance-authority";
 import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -12,11 +12,9 @@ import { cn } from "@/lib/utils";
  * frosted blur (expected, not a bug).
  */
 
-const supportsRefraction =
-  typeof window !== "undefined" &&
-  typeof document !== "undefined" &&
-  /Chrome\/|Chromium|Edg\//.test(window.navigator.userAgent) &&
-  !/CriOS|FxiOS|OPiOS|EdgiOS/.test(window.navigator.userAgent);
+// Disable SVG feDisplacementMap in backdrop-filter as it causes GPU texture memory exhaustion and OOM crashes in Chromium.
+// Standard hardware-accelerated CSS blur + saturation provides the intended macOS/iOS frosted glass appearance cleanly.
+const supportsRefraction = false;
 
 let cachedEdgeMap = null;
 

@@ -32,12 +32,12 @@ const TargetCursor = ({
     padding = 6,
     matchRadius = true,
     dotSize = 4,
-    blendMode = 'difference',
+    blendMode = 'normal',
     showLabel = true,
     clickEffect = true,
     container
 }) => {
-    const [host, setHost] = useState(null);
+    const [host, setHost] = useState(() => (typeof document !== 'undefined' ? document.body : null));
     const rootRef = useRef(null);
     const cornerRefs = useRef([]);
     const dotRef = useRef(null);
@@ -65,12 +65,10 @@ const TargetCursor = ({
     settingsRef.current = settings;
 
     useEffect(() => {
-        const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-        const update = () => setHost(finePointer.matches ? document.body : null);
-        update();
-        finePointer.addEventListener('change', update);
-        return () => finePointer.removeEventListener('change', update);
-    }, []);
+        if (typeof document !== 'undefined' && !host) {
+            setHost(document.body);
+        }
+    }, [host]);
 
     useEffect(() => {
         const root = rootRef.current;
@@ -104,6 +102,10 @@ const TargetCursor = ({
 
         const hideCursor = () => {
             const s = settingsRef.current;
+            if (!rootRef.current) {
+                if (style.textContent) style.textContent = '';
+                return;
+            }
             const scope = scopeOf();
             if (scope !== lastScope) {
                 lastScope?.removeAttribute('data-target-cursor-scope');
@@ -174,12 +176,13 @@ const TargetCursor = ({
             }
 
             if (!pointer.inside && presence.x < 0.01) pointer.seen = false;
-            if (!pointer.seen) {
+            if (!pointer.seen && pointer.inside) {
                 centerX.x = goalX;
                 centerY.x = goalY;
                 halfW.x = goalW;
                 halfH.x = goalH;
-                pointer.seen = pointer.inside;
+                presence.x = 1;
+                pointer.seen = true;
             }
 
             const follow = locked ? snapK : 2200;
@@ -286,7 +289,7 @@ const TargetCursor = ({
         };
 
         const onPointerMove = event => {
-            if (event.pointerType && event.pointerType !== 'mouse') return;
+            if (event.pointerType && event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
             pointer.x = event.clientX;
             pointer.y = event.clientY;
             const inside = insideScope(pointer.x, pointer.y, event.target);
@@ -299,7 +302,7 @@ const TargetCursor = ({
         };
 
         const onPointerDown = event => {
-            if (event.pointerType && event.pointerType !== 'mouse') return;
+            if (event.pointerType && event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
             pointer.pressed = true;
             wake();
         };
@@ -324,20 +327,28 @@ const TargetCursor = ({
         };
 
         window.addEventListener('pointermove', onPointerMove, { passive: true });
+        window.addEventListener('mousemove', onPointerMove, { passive: true });
         window.addEventListener('pointerdown', onPointerDown, { passive: true });
+        window.addEventListener('mousedown', onPointerDown, { passive: true });
         window.addEventListener('pointerup', onPointerUp, { passive: true });
+        window.addEventListener('mouseup', onPointerUp, { passive: true });
         window.addEventListener('scroll', onScroll, { passive: true, capture: true });
         document.documentElement.addEventListener('pointerleave', onLeave);
+        document.documentElement.addEventListener('mouseleave', onLeave);
         window.addEventListener('blur', onLeave);
 
         return () => {
             cancelAnimationFrame(raf);
             wakeRef.current = null;
             window.removeEventListener('pointermove', onPointerMove);
+            window.removeEventListener('mousemove', onPointerMove);
             window.removeEventListener('pointerdown', onPointerDown);
+            window.removeEventListener('mousedown', onPointerDown);
             window.removeEventListener('pointerup', onPointerUp);
+            window.removeEventListener('mouseup', onPointerUp);
             window.removeEventListener('scroll', onScroll, { capture: true });
             document.documentElement.removeEventListener('pointerleave', onLeave);
+            document.documentElement.removeEventListener('mouseleave', onLeave);
             window.removeEventListener('blur', onLeave);
             lastScope?.removeAttribute('data-target-cursor-scope');
             style.remove();
@@ -346,12 +357,25 @@ const TargetCursor = ({
 
     useEffect(() => {
         wakeRef.current?.();
-    });
+    }, [host]);
 
     if (!host) return null;
 
     return createPortal(
-        <div ref={rootRef} className="target-cursor" style={{ mixBlendMode: blendMode, opacity: 0 }} aria-hidden="true">
+        <div
+            ref={rootRef}
+            className="target-cursor"
+            style={{
+                position: 'fixed',
+                inset: 0,
+                zIndex: 2147483647,
+                pointerEvents: 'none',
+                mixBlendMode: blendMode,
+                opacity: 0,
+                '--target-cursor-color': cursorColor || '#ffffff'
+            }}
+            aria-hidden="true"
+        >
             {CORNER_ANGLES.map((angle, i) => (
                 <span
                     key={angle}

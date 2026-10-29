@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 function ChartTooltip({ active, payload, label }) {
@@ -19,7 +19,7 @@ function ChartTooltip({ active, payload, label }) {
 export default function CallsChart({ data, height = 176, compact = false }) {
   return (
     <div style={{ height }} className="w-full">
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" minWidth={100} minHeight={height}>
         <AreaChart data={data} margin={{ top: 8, right: 4, left: 0, bottom: 0 }}>
           <defs>
             <linearGradient id="callsFill" x1="0" y1="0" x2="0" y2="1">

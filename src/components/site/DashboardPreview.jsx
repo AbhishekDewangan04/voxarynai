@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { Suspense, lazy, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { agents, calls, callsPerDay, workspaceStats } from "@/lib/demoData";
@@ -7,9 +7,10 @@ import Reveal from "./Reveal";
 import SectionShell from "./SectionShell";
 import AgentsList from "@/components/dashboard/AgentsList";
 import CallLogTable from "@/components/dashboard/CallLogTable";
-import CallsChart from "@/components/dashboard/CallsChart";
 import SummaryCard from "@/components/dashboard/SummaryCard";
 import TranscriptPanel from "@/components/dashboard/TranscriptPanel";
+
+const CallsChart = lazy(() => import("@/components/dashboard/CallsChart"));
 
 export default function DashboardPreview() {
   const [agentId, setAgentId] = useState(agents[0].id);
@@ -72,7 +73,9 @@ export default function DashboardPreview() {
                         <span className="flex items-center gap-1"><span className="h-1 w-3 rounded-full bg-cyan-300" />Booked</span>
                       </div>
                     </div>
-                    <CallsChart data={callsPerDay} height={132} compact />
+                    <Suspense fallback={<div style={{ height: 132 }} className="w-full animate-pulse rounded-xl bg-white/[0.02]" />}>
+                      <CallsChart data={callsPerDay} height={132} compact />
+                    </Suspense>
                   </div>
 
                   <div className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2.5">

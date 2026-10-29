@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { CalendarCheck, Mic, Pause, Play, Radio } from "lucide-react";
 import { GlassChip, GlassPanel } from "./Glass";
@@ -39,7 +39,7 @@ export default function HeroCallCard({ playing, onToggle }) {
       return () => clearTimeout(restart);
     }
     if (chars < current.text.length) {
-      const typing = setTimeout(() => setChars((c) => c + 1), 15);
+      const typing = setTimeout(() => setChars((c) => c + 1), 32);
       return () => clearTimeout(typing);
     }
     const next = setTimeout(() => {
@@ -159,7 +159,7 @@ export default function HeroCallCard({ playing, onToggle }) {
   );
 }
 
-function Bubble({ who, text, typing = false }) {
+const Bubble = React.memo(function Bubble({ who, text, typing = false }) {
   const isAgent = who === "agent";
   return (
     <motion.div
@@ -183,7 +183,7 @@ function Bubble({ who, text, typing = false }) {
       </div>
     </motion.div>
   );
-}
+});
 
 function MetaChip({ icon: Icon, label }) {
   return (
