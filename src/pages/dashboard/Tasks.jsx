@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { ListChecks } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/client";
 import { GlassPanel } from "@/components/site/Glass";
 import EmptyState from "@/components/app/EmptyState";
 import PageHeader from "@/components/app/PageHeader";
@@ -23,12 +23,12 @@ export default function Tasks() {
   const [tab, setTab] = useState("all");
 
   const load = useCallback(async () => {
-    const user = await base44.auth.me();
+    const user = await api.auth.me();
     const owner = { owner_id: user.id };
     const [tasksPage, callsPage, agentsPage] = await Promise.all([
-      base44.entities.Task.filter(owner, { sort: "-created_date", limit: 200 }),
-      base44.entities.Call.filter(owner, { limit: 200 }),
-      base44.entities.Agent.filter(owner, { limit: 50 }),
+      api.entities.Task.filter(owner, { sort: "-created_date", limit: 200 }),
+      api.entities.Call.filter(owner, { limit: 200 }),
+      api.entities.Agent.filter(owner, { limit: 50 }),
     ]);
     setTasks(tasksPage.items ?? []);
     setCalls(callsPage.items ?? []);

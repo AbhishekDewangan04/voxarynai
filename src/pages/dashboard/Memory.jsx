@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Brain, Pencil, Search, Trash2 } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/client";
 import { GlassButton, GlassCard } from "@/components/site/Glass";
 import { useToast } from "@/components/ui/use-toast";
 import EmptyState from "@/components/app/EmptyState";
@@ -17,8 +17,8 @@ export default function Memory() {
   const [busy, setBusy] = useState(false);
 
   const load = useCallback(async () => {
-    const user = await base44.auth.me();
-    const page = await base44.entities.Memory.filter({ owner_id: user.id }, { sort: "-created_date", limit: 200 });
+    const user = await api.auth.me();
+    const page = await api.entities.Memory.filter({ owner_id: user.id }, { sort: "-created_date", limit: 200 });
     setMemories(page.items ?? []);
   }, []);
 
@@ -52,7 +52,7 @@ export default function Memory() {
     if (!fact) return;
     setBusy(true);
     try {
-      await base44.entities.Memory.update(memory.id, { fact });
+      await api.entities.Memory.update(memory.id, { fact });
       toast({ title: "Memory updated", description: "The agent will use the new wording from now on." });
       setEditingId(null);
       setDraft("");
@@ -66,7 +66,7 @@ export default function Memory() {
 
   const remove = async (memory) => {
     try {
-      await base44.entities.Memory.delete(memory.id);
+      await api.entities.Memory.delete(memory.id);
       toast({ title: "Memory deleted", description: "The agent will forget this detail." });
       await load();
     } catch (error) {

@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
-import { base44 } from '@/api/base44Client';
+import { api } from '@/api/client';
 import { appParams } from '@/lib/app-params';
 
 const AuthContext = createContext();
@@ -11,20 +11,19 @@ export const AuthProvider = ({ children }) => {
   const [isLoadingPublicSettings, setIsLoadingPublicSettings] = useState(true);
   const [authError, setAuthError] = useState(null);
   const [authChecked, setAuthChecked] = useState(false);
-  const [appPublicSettings, setAppPublicSettings] = useState(null); // Contains only { id, public_settings }
+  const [appPublicSettings, setAppPublicSettings] = useState(null);
 
   const checkUserAuth = useCallback(async () => {
     try {
       setIsLoadingAuth(true);
-      if (!appParams.appId || !appParams.token) {
+      const currentUser = await api.auth.me();
+      if (currentUser) {
+        setUser(currentUser);
+        setIsAuthenticated(true);
+      } else {
+        setUser(null);
         setIsAuthenticated(false);
-        setIsLoadingAuth(false);
-        setAuthChecked(true);
-        return;
       }
-      const currentUser = await base44.auth.me();
-      setUser(currentUser);
-      setIsAuthenticated(true);
       setIsLoadingAuth(false);
       setAuthChecked(true);
     } catch (error) {
@@ -33,8 +32,7 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(false);
       setAuthChecked(true);
       
-      // If user auth fails, it might be an expired token
-      if (error.status === 401 || error.status === 403) {
+      if (error?.status === 401 || error?.status === 403) {
         setAuthError({
           type: 'auth_required',
           message: 'Authentication required'
@@ -47,33 +45,16 @@ export const AuthProvider = ({ children }) => {
     try {
       setIsLoadingPublicSettings(true);
       setAuthError(null);
-
-      // Guard: do not attempt to fetch public settings for undefined appId
-      if (!appParams.appId) {
-        setIsLoadingPublicSettings(false);
-        setIsLoadingAuth(false);
-        setAuthChecked(true);
-        return;
-      }
       
       try {
-        const publicSettings = await base44.app.getPublicSettings();
+        const publicSettings = await api.app.getPublicSettings();
         setAppPublicSettings(publicSettings);
-        
-        // If we got the app public settings successfully, check if user is authenticated
-        if (appParams.token) {
-          await checkUserAuth();
-        } else {
-          setIsLoadingAuth(false);
-          setIsAuthenticated(false);
-          setAuthChecked(true);
-        }
+        await checkUserAuth();
         setIsLoadingPublicSettings(false);
       } catch (appError) {
         console.error('App state check failed:', appError);
         
-        // Handle app-level errors
-        if (appError.status === 403 && appError.data?.extra_data?.reason) {
+        if (appError?.status === 403 && appError.data?.extra_data?.reason) {
           const reason = appError.data.extra_data.reason;
           if (reason === 'auth_required') {
             setAuthError({
@@ -94,7 +75,7 @@ export const AuthProvider = ({ children }) => {
         } else {
           setAuthError({
             type: 'unknown',
-            message: appError.message || 'Failed to load app'
+            message: appError?.message || 'Failed to load app'
           });
         }
         setIsLoadingPublicSettings(false);
@@ -105,7 +86,7 @@ export const AuthProvider = ({ children }) => {
       console.error('Unexpected error:', error);
       setAuthError({
         type: 'unknown',
-        message: error.message || 'An unexpected error occurred'
+        message: error?.message || 'An unexpected error occurred'
       });
       setIsLoadingPublicSettings(false);
       setIsLoadingAuth(false);
@@ -122,11 +103,9 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     
     if (shouldRedirect) {
-      // Use the SDK's logout method which handles token cleanup and redirect
-      base44.auth.logout(window.location.href);
+      api.auth.logout(window.location.href);
     } else {
-      // Just remove the token without redirect
-      base44.auth.logout();
+      api.auth.logout();
     }
   };
 

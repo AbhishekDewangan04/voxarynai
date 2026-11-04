@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Brain, ListChecks, X } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/client";
 import {
   SENTIMENT_STYLES,
   STATUS_STYLES,
@@ -24,8 +24,8 @@ export default function CallDrawer({ call, onClose }) {
 
     const load = async () => {
       const [linePage, taskPage] = await Promise.all([
-        base44.entities.TranscriptLine.filter({ call_id: call.id }, { sort: "timestamp_ms", limit: 200 }),
-        base44.entities.Task.filter({ call_id: call.id }, { limit: 50 }),
+        api.entities.TranscriptLine.filter({ call_id: call.id }, { sort: "timestamp_ms", limit: 200 }),
+        api.entities.Task.filter({ call_id: call.id }, { limit: 50 }),
       ]);
       if (cancelled) return;
       setLines(linePage.items ?? []);

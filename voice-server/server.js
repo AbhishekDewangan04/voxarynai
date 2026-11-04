@@ -4,10 +4,10 @@
  * Twilio number  ->  POST /voice/incoming   (TwiML, opens a Media Stream)
  * Media Stream   ->  wss://.../media-stream (audio bridge)
  * OpenAI Realtime <-> Twilio                (speech in, speech out)
- * Base44         <-  call_started / transcript_line / call_ended webhooks
+ * Voxaryn        <-  call_started / transcript_line / call_ended webhooks
  *
  * Nothing about the call is written to disk. Audio is never recorded here;
- * the agent's `recording_enabled` flag is reported to Base44 but this server
+ * the agent's `recording_enabled` flag is reported to Voxaryn but this server
  * does not persist audio under any setting.
  */
 
@@ -18,7 +18,7 @@ import twilio from 'twilio';
 import { WebSocketServer, WebSocket } from 'ws';
 
 const {
-  BASE44_API_URL,
+  VOXARYN_API_URL = process.env.API_URL || '',
   VOXARYN_WEBHOOK_SECRET,
   OPENAI_API_KEY,
   OPENAI_REALTIME_MODEL = 'gpt-4o-realtime-preview',
@@ -46,15 +46,16 @@ const twilioClient =
   TWILIO_ACCOUNT_SID && TWILIO_AUTH_TOKEN ? twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN) : null;
 
 function missingEnv() {
-  return ['BASE44_API_URL', 'VOXARYN_WEBHOOK_SECRET', 'OPENAI_API_KEY', 'TWILIO_AUTH_TOKEN'].filter(
+  return ['VOXARYN_API_URL', 'VOXARYN_WEBHOOK_SECRET', 'OPENAI_API_KEY', 'TWILIO_AUTH_TOKEN'].filter(
     (name) => !process.env[name]
   );
 }
 
-/* ------------------------------------------------------------------ Base44 */
+/* ------------------------------------------------------------------ Backend */
 
-async function callBase44(name, body) {
-  const res = await fetch(`${BASE44_API_URL.replace(/\/$/, '')}/${name}`, {
+async function callBackend(name, body) {
+  if (!VOXARYN_API_URL) return {};
+  const res = await fetch(`${VOXARYN_API_URL.replace(/\/$/, '')}/${name}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-voxaryn-secret': VOXARYN_WEBHOOK_SECRET },
     body: JSON.stringify(body),
@@ -70,7 +71,7 @@ async function callBase44(name, body) {
 }
 
 function ingest(event) {
-  return callBase44('ingestCallEvent', event).catch((error) => {
+  return callBackend('ingestCallEvent', event).catch((error) => {
     log('error', 'ingestCallEvent failed', { event: event.event, error: error.message });
     return null;
   });
@@ -535,7 +536,7 @@ wss.on('connection', (twilioWs) => {
       session.callerNumber = params.caller_number || 'unknown';
 
       try {
-        const context = await callBase44('getAgentContext', {
+        const context = await callBackend('getAgentContext', {
           agent_id: params.agent_id,
           contact_number: session.callerNumber,
         });

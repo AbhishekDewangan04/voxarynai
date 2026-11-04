@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Bot, Pause, Play, Plus, Trash2, Pencil } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/client";
 import { GlassButton, GlassCard, GlassPanel } from "@/components/site/Glass";
 import { useToast } from "@/components/ui/use-toast";
 import AgentForm from "@/components/app/AgentForm";
@@ -22,8 +22,8 @@ export default function Agents() {
   const [busyId, setBusyId] = useState(null);
 
   const load = useCallback(async () => {
-    const user = await base44.auth.me();
-    const page = await base44.entities.Agent.filter({ owner_id: user.id }, { sort: "-created_date", limit: 50 });
+    const user = await api.auth.me();
+    const page = await api.entities.Agent.filter({ owner_id: user.id }, { sort: "-created_date", limit: 50 });
     setAgents(page.items ?? []);
   }, []);
 
@@ -42,11 +42,11 @@ export default function Agents() {
     setSaving(true);
     try {
       if (editing?.id) {
-        await base44.entities.Agent.update(editing.id, values);
+        await api.entities.Agent.update(editing.id, values);
         toast({ title: "Agent updated", description: `${values.name} has the new personality.` });
       } else {
-        const user = await base44.auth.me();
-        await base44.entities.Agent.create({ ...values, owner_id: user.id, status: "active" });
+        const user = await api.auth.me();
+        await api.entities.Agent.create({ ...values, owner_id: user.id, status: "active" });
         toast({ title: "Agent created", description: `${values.name} is ready to take calls.` });
       }
       setEditing(null);
@@ -62,7 +62,7 @@ export default function Agents() {
     setBusyId(agent.id);
     try {
       const status = agent.status === "active" ? "paused" : "active";
-      await base44.entities.Agent.update(agent.id, { status });
+      await api.entities.Agent.update(agent.id, { status });
       toast({ title: status === "active" ? "Agent resumed" : "Agent paused", description: agent.name });
       await load();
     } catch (error) {
@@ -75,7 +75,7 @@ export default function Agents() {
   const remove = async (agent) => {
     setBusyId(agent.id);
     try {
-      await base44.entities.Agent.delete(agent.id);
+      await api.entities.Agent.delete(agent.id);
       toast({ title: "Agent deleted", description: `${agent.name} no longer answers calls.` });
       setConfirmId(null);
       await load();

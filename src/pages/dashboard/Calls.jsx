@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { PhoneCall, PhoneIncoming } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/client";
 import { GlassButton, GlassPanel } from "@/components/site/Glass";
 import { useToast } from "@/components/ui/use-toast";
 import CallDrawer from "@/components/app/CallDrawer";
@@ -25,11 +25,11 @@ export default function Calls() {
   const [openId, setOpenId] = useState(params.get("call") || null);
 
   const load = useCallback(async () => {
-    const user = await base44.auth.me();
+    const user = await api.auth.me();
     const owner = { owner_id: user.id };
     const [agentsPage, callsPage] = await Promise.all([
-      base44.entities.Agent.filter(owner, { limit: 50 }),
-      base44.entities.Call.filter(owner, { sort: "-started_at", limit: 100 }),
+      api.entities.Agent.filter(owner, { limit: 50 }),
+      api.entities.Call.filter(owner, { sort: "-started_at", limit: 100 }),
     ]);
     setAgents(agentsPage.items ?? []);
     setCalls(callsPage.items ?? []);

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { LogOut, ShieldAlert } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/client";
 import { GlassButton, GlassCard, GlassPanel } from "@/components/site/Glass";
 import { useToast } from "@/components/ui/use-toast";
 import LoadDemoDataButton from "@/components/app/LoadDemoDataButton";
@@ -24,7 +24,7 @@ export default function Settings() {
   const [deleting, setDeleting] = useState(false);
 
   const load = useCallback(async () => {
-    const me = await base44.auth.me();
+    const me = await api.auth.me();
     setUser(me);
     setFullName(me.full_name || "");
     setRetention(me.recording_retention || "off");
@@ -38,7 +38,7 @@ export default function Settings() {
     event.preventDefault();
     setSaving(true);
     try {
-      await base44.auth.updateMe({ full_name: fullName.trim(), recording_retention: retention });
+      await api.auth.updateMe({ full_name: fullName.trim(), recording_retention: retention });
       toast({ title: "Settings saved", description: "Your profile and retention choice are updated." });
       await load();
     } catch (error) {
@@ -54,12 +54,12 @@ export default function Settings() {
     try {
       const scope = { owner_id: user.id };
       await Promise.all([
-        base44.entities.Task.deleteMany(scope),
-        base44.entities.TranscriptLine.deleteMany(scope),
-        base44.entities.Memory.deleteMany(scope),
-        base44.entities.Call.deleteMany(scope),
-        base44.entities.Agent.deleteMany(scope),
-        base44.entities.Integration.deleteMany(scope),
+        api.entities.Task.deleteMany(scope),
+        api.entities.TranscriptLine.deleteMany(scope),
+        api.entities.Memory.deleteMany(scope),
+        api.entities.Call.deleteMany(scope),
+        api.entities.Agent.deleteMany(scope),
+        api.entities.Integration.deleteMany(scope),
       ]);
       toast({ title: "Your data is deleted", description: "Agents, calls, transcripts, memories and tasks are gone." });
       setConfirmDelete(false);
@@ -179,7 +179,7 @@ export default function Settings() {
       </GlassCard>
 
       <div className="flex justify-end">
-        <GlassButton size="sm" tone="quiet" onClick={() => base44.auth.logout()}>
+        <GlassButton size="sm" tone="quiet" onClick={() => api.auth.logout()}>
           <span className="inline-flex items-center gap-1.5">
             <LogOut className="h-3.5 w-3.5" /> Sign out
           </span>

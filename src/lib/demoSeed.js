@@ -1,4 +1,4 @@
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/client";
 
 const AGENTS = [
   {
@@ -107,10 +107,10 @@ const MEMORIES = [
 ];
 
 export async function loadDemoData() {
-  const user = await base44.auth.me();
+  const user = await api.auth.me();
   const owner_id = user.id;
 
-  const agents = await base44.entities.Agent.bulkCreate(
+  const agents = await api.entities.Agent.bulkCreate(
     AGENTS.map((agent) => ({
       ...agent,
       owner_id,
@@ -119,7 +119,7 @@ export async function loadDemoData() {
   );
 
   const now = Date.now();
-  const calls = await base44.entities.Call.bulkCreate(
+  const calls = await api.entities.Call.bulkCreate(
     CALLS.map((call, index) => ({
       owner_id,
       agent_id: agents[index % agents.length].id,
@@ -145,9 +145,9 @@ export async function loadDemoData() {
       timestamp_ms,
     }));
   });
-  if (lineRows.length) await base44.entities.TranscriptLine.bulkCreate(lineRows);
+  if (lineRows.length) await api.entities.TranscriptLine.bulkCreate(lineRows);
 
-  await base44.entities.Task.bulkCreate(
+  await api.entities.Task.bulkCreate(
     TASKS.filter((task) => calls[task.callIndex]).map((task) => {
       const call = calls[task.callIndex];
       return {
@@ -161,7 +161,7 @@ export async function loadDemoData() {
     })
   );
 
-  await base44.entities.Memory.bulkCreate(
+  await api.entities.Memory.bulkCreate(
     MEMORIES.filter((memory) => calls[memory.callIndex]).map((memory) => {
       const call = calls[memory.callIndex];
       return {

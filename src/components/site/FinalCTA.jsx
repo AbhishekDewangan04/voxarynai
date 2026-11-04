@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Check, ShieldCheck, Sparkles } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/client";
 import { GlassButton, GlassPanel } from "./Glass";
 import Reveal from "./Reveal";
 import Waveform from "./Waveform";
@@ -27,7 +27,7 @@ export default function FinalCTA() {
     setMessage("");
 
     try {
-      const response = await base44.functions.invoke("createWaitlistEntry", { email: value, source: "home" });
+      const response = await api.functions.invoke("createWaitlistEntry", { email: value, source: "home" });
       const data = response?.data ?? {};
       if (data.error) {
         setStatus("error");

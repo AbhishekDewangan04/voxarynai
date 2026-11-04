@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Bot, PhoneCall } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/client";
 import { GlassCard, GlassPanel } from "@/components/site/Glass";
 import CallsChart from "@/components/dashboard/CallsChart";
 import EmptyState from "@/components/app/EmptyState";
@@ -17,12 +17,12 @@ export default function Overview() {
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
-    const user = await base44.auth.me();
+    const user = await api.auth.me();
     const owner = { owner_id: user.id };
     const [agentsPage, callsPage, tasksPage] = await Promise.all([
-      base44.entities.Agent.filter(owner, { limit: 50 }),
-      base44.entities.Call.filter(owner, { sort: "-started_at", limit: 100 }),
-      base44.entities.Task.filter(owner, { limit: 200 }),
+      api.entities.Agent.filter(owner, { limit: 50 }),
+      api.entities.Call.filter(owner, { sort: "-started_at", limit: 100 }),
+      api.entities.Task.filter(owner, { limit: 200 }),
     ]);
     setData({
       agents: agentsPage.items ?? [],

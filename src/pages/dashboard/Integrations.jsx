@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Check, Plug } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/client";
 import { GlassButton, GlassCard } from "@/components/site/Glass";
 import { useToast } from "@/components/ui/use-toast";
 import PageHeader from "@/components/app/PageHeader";
@@ -27,9 +27,9 @@ export default function Integrations() {
   const [ownerId, setOwnerId] = useState(null);
 
   const load = useCallback(async () => {
-    const user = await base44.auth.me();
+    const user = await api.auth.me();
     setOwnerId(user.id);
-    const page = await base44.entities.Integration.filter({ owner_id: user.id }, { limit: 50 });
+    const page = await api.entities.Integration.filter({ owner_id: user.id }, { limit: 50 });
     setRecords(page.items ?? []);
   }, []);
 
@@ -43,12 +43,12 @@ export default function Integrations() {
     setBusy(provider.id);
     try {
       if (existing) {
-        await base44.entities.Integration.update(existing.id, {
+        await api.entities.Integration.update(existing.id, {
           status: connected ? "disconnected" : "connected",
           scopes: provider.scopes,
         });
       } else {
-        await base44.entities.Integration.create({
+        await api.entities.Integration.create({
           owner_id: ownerId,
           provider: provider.id,
           status: "connected",

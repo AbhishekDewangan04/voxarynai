@@ -11,8 +11,7 @@ import {
   Plug,
   Settings,
 } from "lucide-react";
-import { base44 } from "@/api/base44Client";
-import { appParams } from "@/lib/app-params";
+import { api } from "@/api/client";
 import Background from "@/components/site/Background";
 import Brand from "@/components/site/Brand";
 
@@ -38,11 +37,7 @@ export default function DashboardShell() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (!appParams.appId) {
-      setUser(null);
-      return;
-    }
-    base44.auth.me().then(setUser).catch(() => setUser(null));
+    api.auth.me().then(setUser).catch(() => setUser(null));
   }, []);
 
   const initials = (user?.full_name || user?.email || "V")
@@ -91,7 +86,7 @@ export default function DashboardShell() {
                 </Link>
                 <button
                   type="button"
-                  onClick={() => base44.auth.logout()}
+                  onClick={() => api.auth.logout()}
                   className="cursor-target inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[11.5px] text-white/45 transition-colors hover:text-white"
                 >
                   <LogOut className="h-3 w-3" aria-hidden="true" />
@@ -124,7 +119,7 @@ export default function DashboardShell() {
             ))}
             <button
               type="button"
-              onClick={() => base44.auth.logout()}
+              onClick={() => api.auth.logout()}
               aria-label="Sign out"
               className="ml-auto shrink-0 rounded-full p-1.5 text-white/45 hover:text-white"
             >

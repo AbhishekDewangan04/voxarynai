@@ -1,14 +1,14 @@
 # Voxaryn voice server
 
 A small Node service that connects a Twilio phone number to the Voxaryn AI agent
-in your Base44 app. It handles Twilio Media Streams, bridges audio to the OpenAI
-Realtime API, and reports every call back to Base44.
+in your app. It handles Twilio Media Streams, bridges audio to the OpenAI
+Realtime API, and reports every call back to Voxaryn.
 
 ```
 Caller → Twilio number → POST /voice/incoming (TwiML)
                        → wss://…/media-stream (audio in/out)
                        ↔ OpenAI Realtime (speech + tool calls)
-                       → Base44: call_started · transcript_line · call_ended
+                       → Voxaryn: call_started · transcript_line · call_ended
                                  → summarizeCall · extractMemories
 ```
 
@@ -16,7 +16,7 @@ Caller → Twilio number → POST /voice/incoming (TwiML)
 
 1. **`POST /voice/incoming`** validates the Twilio signature and answers with
    TwiML that opens a bidirectional Media Stream.
-2. On stream start it calls **`getAgentContext`** on Base44 to load the agent's
+2. On stream start it calls **`getAgentContext`** on the backend to load the agent's
    personality and every stored memory for the caller's number.
 3. Audio is bridged to the **OpenAI Realtime API**. The session instructions are
    built from the agent's voice, tone, language, purpose, rules and memories, and
@@ -33,7 +33,7 @@ Caller → Twilio number → POST /voice/incoming (TwiML)
    | `transfer_to_human` | `transfer_to_human` |
 
 5. Each turn is reported with **`ingestCallEvent`** (`call_started`,
-   `transcript_line`, `call_ended`). On `call_ended`, Base44 runs `summarizeCall`
+   `transcript_line`, `call_ended`). On `call_ended`, the backend runs `summarizeCall`
    and `extractMemories`, so the next call from the same number greets the caller
    with what the agent remembers.
 6. **`GET /health`** returns `{ ok, uptime, missingEnv }` for platform health checks.
@@ -46,7 +46,7 @@ Caller → Twilio number → POST /voice/incoming (TwiML)
 
 | Variable | Required | Purpose |
 | --- | --- | --- |
-| `BASE44_API_URL` | yes | Base URL of the app's functions, e.g. `https://your-app.base44.app/functions` |
+| `VOXARYN_API_URL` | yes | Base URL of the app's functions, e.g. `https://your-app.com/functions` |
 | `VOXARYN_WEBHOOK_SECRET` | yes | Must equal the app secret `VOXARYN_WEBHOOK_SECRET` (Dashboard → Secrets) |
 | `OPENAI_API_KEY` | yes | Realtime API key |
 | `TWILIO_ACCOUNT_SID` | yes* | Twilio account (needed for SMS + transfer) |
@@ -95,10 +95,10 @@ Twilio cannot reach `localhost`, so for a real call expose the port with
 2. **A call comes in** → **Webhook**, `https://<your-service-host>/voice/incoming`, method **HTTP POST**.
 3. Keep the number's voice settings on the default; the TwiML from this server
    controls the stream.
-4. Call the number. In Base44, the call appears under **Dashboard → Calls**, and
+4. Call the number. In Voxaryn, the call appears under **Dashboard → Calls**, and
    the transcript, summary and tasks land a few seconds after you hang up.
 
-## Connecting back to Base44
+## Connecting back to Voxaryn
 
 Create the shared secret in **Dashboard → Secrets** as `VOXARYN_WEBHOOK_SECRET`
 (e.g. `openssl rand -hex 32`) and use the same value in this service's `.env`.

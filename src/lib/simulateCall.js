@@ -1,4 +1,4 @@
-import { base44 } from "@/api/base44Client";
+import { api } from "@/api/client";
 
 const CALLER = { name: "Priya Nair", number: "+91 98200 41277" };
 const LINE_INTERVAL_MS = 2000;
@@ -40,16 +40,16 @@ function buildDialogue(agent, memories) {
 }
 
 export async function simulateIncomingCall({ agent }) {
-  const user = await base44.auth.me();
+  const user = await api.auth.me();
   const owner_id = user.id;
 
-  const memoryPage = await base44.entities.Memory.filter(
+  const memoryPage = await api.entities.Memory.filter(
     { agent_id: agent.id, contact_number: CALLER.number },
     { sort: "-created_date", limit: 3 }
   );
   const memories = memoryPage?.items ?? [];
 
-  const call = await base44.entities.Call.create({
+  const call = await api.entities.Call.create({
     owner_id,
     agent_id: agent.id,
     caller_name: CALLER.name,
@@ -66,7 +66,7 @@ export async function simulateIncomingCall({ agent }) {
   for (const line of dialogue) {
     await sleep(LINE_INTERVAL_MS);
     elapsed += LINE_INTERVAL_MS;
-    await base44.entities.TranscriptLine.create({
+    await api.entities.TranscriptLine.create({
       owner_id,
       call_id: call.id,
       speaker: line.speaker,
@@ -75,13 +75,13 @@ export async function simulateIncomingCall({ agent }) {
     });
   }
 
-  await base44.entities.Call.update(call.id, {
+  await api.entities.Call.update(call.id, {
     status: "completed",
     duration_seconds: Math.round(elapsed / 1000),
   });
 
-  const summary = await base44.functions.invoke("summarizeCall", { call_id: call.id });
-  const memory = await base44.functions.invoke("extractMemories", { call_id: call.id });
+  const summary = await api.functions.invoke("summarizeCall", { call_id: call.id });
+  const memory = await api.functions.invoke("extractMemories", { call_id: call.id });
 
   return {
     callId: call.id,
